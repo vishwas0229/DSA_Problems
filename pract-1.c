@@ -33,7 +33,6 @@ void getArr(struct array *a)
 // Print array
 void printArr(struct array *a)
 {
-    printf("Array: ");
     for (int i = 0; i < (a->used_size); i++)
     {
         printf("%d ", (a->ptr)[i]);
@@ -60,6 +59,11 @@ int insert(struct array *a, int index, int element)
 // Deletion
 void del(struct array *a, int index)
 {
+    if (index > (a->used_size))
+    {
+        printf("Deletion failed...");
+        return;
+    }
     for (int i = index; i < (a->used_size) - 1; i++)
     {
         (a->ptr[i]) = (a->ptr)[i + 1];
@@ -67,14 +71,50 @@ void del(struct array *a, int index)
     (a->used_size)--;
 }
 
+// Reverse
+void reveArr(struct array *a, int uSize)
+{
+    int temp;
+    int end = uSize - 1;
+    for (int i = 0; i < end; i++)
+    {
+        temp = (a->ptr)[i];
+        (a->ptr)[i] = (a->ptr)[end];
+        (a->ptr)[end] = temp;
+        end--;
+    }
+}
+
+// Merge
+void merge(struct array *arr, struct array *arr1, int uSize, int uSize1)
+{
+    int j = uSize;
+    if (uSize + uSize1 > MAX)
+    {
+        printf("Array is full!!\nMerge failed...");
+        return;
+    }
+    for (int i = 0; i < uSize; i++)
+    {
+        (arr->ptr)[j] = (arr1->ptr)[i];
+        j++;
+    }
+    (arr->used_size) = uSize + uSize1;
+}
+
 int main()
 {
-    int op, uSize, index, element;
-    struct array arr;
+    int op, uSize, uSize1, index, element;
+    struct array arr, arr1;
     printf("Operations!!!\n");
     printf("1. Insertion\n2. Deletion\n3. Traversal\n4. Reverse\n5. Merge");
     printf("\nChose one Operaction(1,2,3,4,5,0): ");
     scanf("%d", &op);
+    if (op == 0 || op >= 6)
+    {
+        printf("Select right operation!!");
+        return 0p;
+    }
     printf("Enter size of array: ");
     scanf("%d", &uSize);
     creatArr(&arr, MAX, uSize);
@@ -87,30 +127,52 @@ int main()
         scanf("%d", &element);
         printf("Enter index where you want to insert element: ");
         scanf("%d", &index);
+        printf("Array before insertion: ");
         printArr(&arr);
         insert(&arr, index, element);
-        printf("After Insertion!!\n");
+        printf("Array after insertion: ");
         printArr(&arr);
         break;
     case 2:
-        //Deletion
+        // Deletion
         getArr(&arr);
         printf("Enter which index you want to delete: ");
         scanf("%d", &index);
+        printf("Array before deletion: ");
         printArr(&arr);
         del(&arr, index);
-        printf("After Deletion!!\n");
+        printf("Array after Deletion: ");
         printArr(&arr);
         break;
     case 3:
         // Traversal
         getArr(&arr);
+        printf("Array: ");
         printArr(&arr);
         break;
     case 4:
-        //Reverse
+        // Reverse
+        getArr(&arr);
+        printf("Array before reverse: ");
+        printArr(&arr);
+        reveArr(&arr, uSize);
+        printf("Array after reverse: ");
+        printArr(&arr);
         break;
     case 5:
+        // Merge
+        getArr(&arr);
+        printf("Enter size of array: ");
+        scanf("%d", &uSize1);
+        creatArr(&arr1, MAX, uSize1);
+        getArr(&arr1);
+        printf("Array before merge!!\n");
+        printf("Array 1: ");
+        printArr(&arr);
+        printf("Array 2: ");
+        printArr(&arr1);
+        merge(&arr, &arr1, uSize, uSize1);
+        printArr(&arr);
         break;
     }
 }
