@@ -113,7 +113,7 @@ int main()
     if (op == 0 || op >= 6)
     {
         printf("Select right operation!!");
-        return 0p;
+        return 0;
     }
     printf("Enter size of array: ");
     scanf("%d", &uSize);
