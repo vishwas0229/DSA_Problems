@@ -1,17 +1,54 @@
 #include <stdio.h>
+#include <stdlib.h>
 #define MAX 100
 
-int i, j, key, arr[MAX], size_of_arr;
-
-// insertion short
-void insertion_short(int size_of_arr)
+struct array
 {
-    for (i = 0; i < size_of_arr; i++)
+    int total_size;
+    int used_size;
+    int *ptr;
+};
+
+void createArray(struct array *arr, int uSize, int tSize)
+{
+    arr->total_size = tSize;
+    arr->used_size = uSize;
+    arr->ptr = (int *)malloc(tSize * sizeof(int));
+}
+
+//  Get element of array
+void getArr(struct array *a)
+{
+    int n;
+    for (int i = 0; i < a->used_size; i++)
     {
-        printf("\nEnter Element %d: ", i + 1);
+        printf("Enter element %d: ", i);
+        scanf("%d", &n);
+        (a->ptr)[i] = n;
+    }
+}
+
+// Print array
+void printArr(struct array *a)
+{
+    for (int i = 0; i < (a->used_size); i++)
+    {
+        printf("%d ", (a->ptr)[i]);
+    }
+    printf("\n");
+}
+
+// insertion sort
+void insertion_sort(int uSize)
+{
+    int i, j;
+    int arr[MAX];
+    for (i = 0; i < uSize; i++)
+    {
+        printf("\nEnter Element %d: ", i);
         scanf("%d", &arr[i]);
         // shortning logic asending order
-        key = arr[i];
+        int key = arr[i];
         for (j = i - 1; j >= 0 && arr[j] > key; j--)
         {
             arr[j + 1] = arr[j];
@@ -27,58 +64,137 @@ void insertion_short(int size_of_arr)
     }
 }
 
-// selection short
-int selection_short(int size_of_arr)
+// selection sort
+void selection_sort(struct array *arr)
 {
-    for (i = 0; i < size_of_arr; i++)
+    for (int i = 0; i < arr->used_size - 1; i++)
     {
-        printf("Enter Element %d: ", i + 1);
-        scanf("%d", &arr[i]);
-    }
-    for (i = 0; i < size_of_arr - 1; ++i)
-    {
-        key = i;
-        for (j = i + 1; j < size_of_arr; ++j)
+        int key = i;
+        for (int j = i + 1; j < arr->used_size; j++)
         {
-            if (arr[j] < arr[key])
+            if (arr->ptr[j] < arr->ptr[key])
             {
+                if (arr->ptr == NULL)
+                {
+                    printf("Memory allocation failed\n");
+                    exit(1);
+                }
                 key = j;
             }
         }
-        int temp = arr[i];
-        arr[i] = arr[key];
-        arr[key] = temp;
+        int temp = arr->ptr[i];
+        arr->ptr[i] = arr->ptr[key];
+        arr->ptr[key] = temp;
     }
-    for (i = 0; i < size_of_arr; i++)
+}
+
+// Bubble Sort
+void bubble_sort(struct array *arr)
+{
+    for (int i = 0; i < arr->used_size; i++)
     {
-        printf("%d ", arr[i]);
+        for (int j = 0; j < arr->used_size - i - 1; j++)
+        {
+            if (arr->ptr[j] > arr->ptr[j + 1])
+            {
+                int temp = arr->ptr[j];
+                arr->ptr[j] = arr->ptr[j + 1];
+                arr->ptr[j + 1] = temp;
+            }
+        }
     }
-    printf("\n");
+}
+
+// Merge Sort
+void merge(struct array *arr, int low, int mid, int high)
+{
+    int i = low, k = low, j = mid + 1;
+    int temp[high - low + 1];
+    while (i <= mid && j <= high)
+    {
+        if (arr->ptr[i] < arr->ptr[j])
+        {
+            temp[k++] = arr->ptr[i++];
+        }
+        else
+        {
+            temp[k++] = arr->ptr[j++];
+        }
+    }
+    while (i <= mid)
+    {
+        temp[k++] = arr->ptr[i++];
+    }
+    while (j <= high)
+    {
+        temp[k++] = arr->ptr[j++];
+    }
+    for (i = low; i <= high; i++)
+    {
+        arr->ptr[i] = temp[i];
+    }
+}
+
+void merge_sort(struct array *arr, int low, int high)
+{
+    if (low < high)
+    {
+        int mid = (low + high) / 2;
+
+        merge_sort(arr, low, mid);      // left
+        merge_sort(arr, mid + 1, high); // right
+
+        merge(arr, low, mid, high); // merge
+    }
 }
 
 int main()
 {
+    struct array arr;
+    int uSize, tSize, op;
     while (1)
     {
-        int choice;
-        printf("\n1.) Bubble Short\n2.) Merge Short\n3.) Insertion Short \n4.) Selection Short\n0.) Exit\nSelect Opration:");
-        scanf("%d", &choice);
-        if (choice == 0)
+        int op;
+        printf("\n1.) Bubble Sort\n2.) Merge Sort\n3.) Insertion Sort \n4.) Selection Sort\n0.) Exit\nSelect Opration: ");
+        scanf("%d", &op);
+        if (op == 0)
         {
-            printf("Programe is exiting...");
+            printf("Programe is exiting...\n");
             return 0;
         }
         printf("Enter the size of array: ");
-        scanf("%d", &size_of_arr);
-        switch (choice)
+        scanf("%d", &uSize);
+        createArray(&arr, uSize, MAX);
+        switch (op)
         {
         default:
             printf("Invalid Choice!\nPlease enter correct choice.");
+        case 1:
+            getArr(&arr);
+            printf("Array before sort: ");
+            printArr(&arr);
+            bubble_sort(&arr);
+            printf("Array after sort: ");
+            printArr(&arr);
+            break;
+        case 2:
+            getArr(&arr);
+            printf("Array before sort: ");
+            printArr(&arr);
+            merge_sort(&arr, 0, uSize - 1);
+            printf("Array after sort: ");
+            printArr(&arr);
+            break;
         case 3:
-            insertion_short(size_of_arr);
+            insertion_sort(uSize);
             break;
         case 4:
-            selection_short(size_of_arr);
+            getArr(&arr);
+            printf("Array before sort: ");
+            printArr(&arr);
+            selection_sort(&arr);
+            printf("Array after sort: ");
+            printArr(&arr);
             break;
         }
     }

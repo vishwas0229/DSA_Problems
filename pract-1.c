@@ -9,8 +9,8 @@ struct array
     int *ptr;
 };
 
-// Creat Array
-void creatArr(struct array *a, int tSize, int uSize)
+// Create Array
+void createArr(struct array *a, int tSize, int uSize)
 {
     a->total_size = tSize;
     a->used_size = uSize;
@@ -117,7 +117,7 @@ int main()
     }
     printf("Enter size of array: ");
     scanf("%d", &uSize);
-    creatArr(&arr, MAX, uSize);
+    createArr(&arr, MAX, uSize);
     switch (op)
     {
     case 1:
@@ -164,7 +164,7 @@ int main()
         getArr(&arr);
         printf("Enter size of array: ");
         scanf("%d", &uSize1);
-        creatArr(&arr1, MAX, uSize1);
+        createArr(&arr1, MAX, uSize1);
         getArr(&arr1);
         printf("Array before merge!!\n");
         printf("Array 1: ");
