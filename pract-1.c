@@ -108,7 +108,7 @@ int main()
     struct array arr, arr1;
     printf("Operations!!!\n");
     printf("1. Insertion\n2. Deletion\n3. Traversal\n4. Reverse\n5. Merge");
-    printf("\nChose one Operaction(1,2,3,4,5,0): ");
+    printf("\nChose one Operaction(1,2,3,4,5): ");
     scanf("%d", &op);
     if (op == 0 || op >= 6)
     {
