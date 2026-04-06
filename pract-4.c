@@ -2,20 +2,21 @@
 #include <stdlib.h>
 struct Node
 {
-    int data;
     struct Node *next;
+    int data;
 };
 
-// Linked List Travarsal
-void trevLinkedList(struct Node *ptr)
+// Traversal
+void trevLinkedList(struct Node *head)
 {
-    printf("Enlement: ");
-    while (ptr != NULL)
+    struct Node *ptr = head;
+    printf("Linked List: ");
+    do
     {
         printf("%d -> ", ptr->data);
         ptr = ptr->next;
-    }
-    printf("NULL");
+    } while (ptr != head);
+    printf("%d", head->data);
 }
 
 // Inserting at the beginning
@@ -23,22 +24,27 @@ struct Node *insertAtFirst(struct Node *head, int data)
 {
     struct Node *ptr = (struct Node *)malloc(sizeof(struct Node));
     ptr->data = data;
+    struct Node *p = head->next;
+    while (p->next != head)
+    {
+        p = p->next;
+    }
+    p->next = ptr;
     ptr->next = head;
-    return ptr;
+    head = ptr;
+    return head;
 }
 
 // Inserting in between
 struct Node *insertAtIndex(struct Node *head, int data, int index)
 {
     struct Node *ptr = (struct Node *)malloc(sizeof(struct Node));
+    ptr->data = data;
     struct Node *p = head;
-    int i = 0;
-    while (i != index - 1)
+    for (int i = 1; i < index - 1; i++)
     {
         p = p->next;
-        i++;
     }
-    ptr->data = data;
     ptr->next = p->next;
     p->next = ptr;
     return head;
@@ -50,12 +56,12 @@ struct Node *insertAtEnd(struct Node *head, int data)
     struct Node *ptr = (struct Node *)malloc(sizeof(struct Node));
     ptr->data = data;
     struct Node *p = head;
-    while (p->next != NULL)
+    while (p->next != head)
     {
         p = p->next;
     }
     p->next = ptr;
-    ptr->next = NULL;
+    ptr->next = head;
     return head;
 }
 
@@ -73,7 +79,13 @@ struct Node *insertAfterNode(struct Node *head, struct Node *prevNode, int data)
 struct Node *deleteAtFirst(struct Node *head)
 {
     struct Node *ptr = head;
+    struct Node *p = head->next;
+    while (p->next != head)
+    {
+        p = p->next;
+    }
     head = head->next;
+    p->next = head;
     free(ptr);
     return head;
 }
@@ -81,15 +93,15 @@ struct Node *deleteAtFirst(struct Node *head)
 // Deleting the node at the index
 struct Node *deleteAtIndex(struct Node *head, int index)
 {
-    struct Node *p = head;
-    struct Node *q = head->next;
+    struct Node *ptr = head;
+    struct Node *p = head->next;
     for (int i = 1; i < index - 1; i++)
     {
+        ptr = ptr->next;
         p = p->next;
-        q = q->next;
     }
-    p->next = q->next;
-    free(q);
+    ptr->next = p->next;
+    free(p);
     return head;
 }
 
@@ -97,14 +109,14 @@ struct Node *deleteAtIndex(struct Node *head, int index)
 struct Node *deleteAtEnd(struct Node *head)
 {
     struct Node *ptr = head;
-    struct Node *q = head->next;
-    while (q->next != NULL)
+    struct Node *p = head->next;
+    while (p->next != head)
     {
         ptr = ptr->next;
-        q = q->next;
+        p = p->next;
     }
-    ptr->next = NULL;
-    free(q);
+    ptr->next = head;
+    free(p);
     return head;
 }
 
@@ -112,22 +124,22 @@ struct Node *deleteAtEnd(struct Node *head)
 struct Node *deleteByValue(struct Node *head, int value)
 {
     struct Node *ptr = head;
-    struct Node *q = head->next;
+    struct Node *p = head->next;
     if (head->data == value)
     {
         head = deleteAtFirst(head);
     }
     else
     {
-        while (q->data != value && q->next != NULL)
+        while (p->data != value && p->next != head)
         {
             ptr = ptr->next;
-            q = q->next;
+            p = p->next;
         }
-        if (q->data == value)
+        if (p->data == value)
         {
-            ptr->next = q->next;
-            free(q);
+            ptr->next = p->next;
+            free(p);
         }
     }
     return head;
@@ -143,17 +155,17 @@ int main()
     third = (struct Node *)malloc(sizeof(struct Node));
     fourth = (struct Node *)malloc(sizeof(struct Node));
 
-    head->data = 5;
+    head->data = 4;
     head->next = second;
 
-    second->data = 8;
+    second->data = 7;
     second->next = third;
 
-    third->data = 12;
+    third->data = 9;
     third->next = fourth;
 
-    fourth->data = 15;
-    fourth->next = NULL;
+    fourth->data = 18;
+    fourth->next = head;
 
     printf("Operation!!");
     printf("\n1. Traversal\n2. Inserting at the beginning\n3. Inserting in between\n4. Inserting at the end\n5. Inserting after a given Node\n6. Deleting the first node\n7. Deleting the node at the index\n8. Deleting the last node\n9. Deleting the first node with a given value");
