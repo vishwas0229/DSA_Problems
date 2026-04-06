@@ -1,6 +1,6 @@
 # C Programming Practice — Detailed Guide
 
-This repository contains two instructional C programs for learning array operations and classic sorting algorithms. This README now includes:
+This repository contains five instructional C programs for learning array operations, classic sorting algorithms, and several linked-list variants. This README includes:
 
 - Precise function-level descriptions (purpose, parameters, pre/postconditions)
 - Pseudocode and recommended safety checks
@@ -10,6 +10,9 @@ This repository contains two instructional C programs for learning array operati
 Files
 - `pract-1.c` — dynamic array operations: create, read, print, insert, delete, reverse, merge
 - `pract-2.c` — sorting algorithms: bubble sort, merge sort, insertion sort (interactive), selection sort
+- `pract-3.c` — singly linked list: traversal, insert (beginning/index/end/after), delete (first/index/end/by value)
+- `pract-4.c` — circular linked list: traversal and insert/delete operations in circular form
+- `pract-5.c` — doubly linked list: forward and reverse traversal, insert/delete maintaining `prev` and `next`
 
 ---
 
@@ -17,10 +20,16 @@ Files
 ```bash
 gcc -std=c11 -Wall -Wextra pract-1.c -o pract-1
 gcc -std=c11 -Wall -Wextra pract-2.c -o pract-2
+gcc -std=c11 -Wall -Wextra pract-3.c -o pract-3
+gcc -std=c11 -Wall -Wextra pract-4.c -o pract-4
+gcc -std=c11 -Wall -Wextra pract-5.c -o pract-5
 
 # Run (Linux/macOS)
 ./pract-1
 ./pract-2
+./pract-3
+./pract-4
+./pract-5
 ```
 
 On Windows (MinGW) run the produced `.exe` files.
@@ -210,36 +219,70 @@ Common issues & suggested fixes (`pract-2.c`)
 
 ---
 
+## 3) `pract-3.c` — Singly linked list (interactive)
+
+Summary
+- Implements a basic singly linked list with:
+  - Traversal
+  - Insert at beginning, at index, at end, and after a given node
+  - Delete at first, at index, at end, and delete by value
+- `main()` builds a 4-node sample list and exposes a menu (options 1–9).
+
+Design notes & suggestions
+- Check `malloc` return values when creating nodes.
+- Validate indices and `NULL` pointers before dereferencing to avoid crashes.
+- Insertion into an empty list and deletions with invalid indices should be guarded.
+
+---
+
+## 4) `pract-4.c` — Circular linked list (interactive)
+
+Summary
+- Implements a circular singly linked list with the same set of operations as the singly list but using a circular structure (do-while traversal).
+- `main()` creates a 4-node circular list and presents the same menu-driven interface.
+
+Design notes & suggestions
+- Handle the single-node circular list as a special case in delete/insert functions.
+- Ensure loops terminate correctly and avoid infinite loops by checking head conditions.
+
+---
+
+## 5) `pract-5.c` — Doubly linked list (interactive)
+
+Summary
+- Implements a doubly linked list with `prev` and `next` pointers.
+- Supports forward and reverse traversal, standard insertions, and deletions.
+- `main()` constructs a sample 4-node list and exposes the same menu.
+
+Design notes & suggestions
+- Ensure `prev` pointers are correctly updated after insertions and deletions.
+- Check `malloc` return values and handle empty-list edge cases.
+
+---
+
 ## Suggested minimal code patches (examples)
 
-1) Add `malloc` check in `createArr` (pract-1 & pract-2):
+1) Add `malloc` check in `createArr` (pract-1 & pract-2) and node allocations in linked-list files:
 
 ```c
 a->ptr = malloc(tSize * sizeof(int));
 if (!a->ptr) { perror("malloc"); exit(EXIT_FAILURE); }
 ```
 
-2) Validate indices in `insert` and `del`:
+2) Validate indices in `insert` and `del` and guard against NULL pointer dereferences:
 
 ```c
 if (index < 0 || index > a->used_size) return -1; // for insert
 if (index < 0 || index >= a->used_size) { printf("Deletion failed\n"); return; }
 ```
 
-3) Fix selection sort null-check placement:
-
-```c
-// after createArray and before calling selection_sort:
-if (arr.ptr == NULL) { perror("malloc"); exit(EXIT_FAILURE); }
-
-// inside selection_sort, remove any repeated null-checks inside loops
-```
+3) Fix merge implementation in `pract-2.c` and free temporary buffers after use.
 
 ---
 
 ## Testing suggestions
 - Create small input files for each example case and capture stdout. For example `pract1_insert.txt` with inputs for the insertion scenario.
-- Use a shell script to run the program and compare stdout to expected output.
+- Use a shell script to run the programs and compare stdout to expected output.
 
 Example run command (Linux/macOS):
 
@@ -252,7 +295,7 @@ diff out.txt expected_insert.out
 
 ## Next steps I can take for you
 
-- Apply the minimal code fixes to `pract-1.c` and `pract-2.c` (malloc checks, index validation, merge fix, free calls).
+- Apply the minimal code fixes to `pract-1.c`, `pract-2.c`, and the linked-list files (`pract-3.c`–`pract-5.c`).
 - Add inline comments in the C files explaining each block line-by-line.
 - Produce small test input files and a run script that validates outputs automatically.
 
