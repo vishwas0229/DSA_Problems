@@ -110,16 +110,14 @@ int main()
     printf("1. Insertion\n2. Deletion\n3. Traversal\n4. Reverse\n5. Merge");
     printf("\nChose one Operaction(1,2,3,4,5): ");
     scanf("%d", &op);
-    if (op == 0 || op >= 6)
-    {
-        printf("Select right operation!!");
-        return 0;
-    }
     printf("Enter size of array: ");
     scanf("%d", &uSize);
     createArr(&arr, MAX, uSize);
     switch (op)
     {
+    default:
+        printf("Select right operation!!");
+        break;
     case 1:
         // Insertion
         getArr(&arr);
