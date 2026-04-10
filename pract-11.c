@@ -24,29 +24,68 @@ void getArray(struct array *arr, int uSize)
     }
 }
 
+void bubble_sort(struct array *arr)
+{
+    for (int i = 0; i < arr->total_size; i++)
+    {
+        for (int j = 0; j < arr->total_size - i - 1; j++)
+        {
+            if (arr->ptr[j] > arr->ptr[j + 1])
+            {
+                int temp = arr->ptr[j];
+                arr->ptr[j] = arr->ptr[j + 1];
+                arr->ptr[j + 1] = temp;
+            }
+        }
+    }
+}
+
 void displayArray(struct array *arr)
 {
     printf("Array: ");
     for (int i = 0; i < arr->total_size; i++)
     {
-        printf("%d", arr->ptr[i]);
+        printf("%d ", arr->ptr[i]);
     }
+    printf("\n");
 }
 
 void linearSearch(struct array *arr, int value)
 {
-    int count = 0, i;
-    for (i = 0; i < arr->total_size; i++)
+    for (int i = 0; i < arr->total_size; i++)
     {
         if (arr->ptr[i] == value)
         {
-            count = 1;
-            break;
+            printf("%d at index %d\n", value, i);
+            return;
         }
     }
-    if (count == 1)
+    printf("%d is not present in this array\n", value);
+}
+
+void binarySearch(struct array *arr, int value, int low, int high)
+{
+    if (low <= high)
     {
-        printf("%d at index %d\n", value, i);
+        int mid = (low + high) / 2;
+        if (arr->ptr[mid] == value)
+        {
+            printf("%d at index %d\n", value, mid);
+            return;
+        }
+        else
+        {
+            if (value < arr->ptr[mid])
+            {
+                high = mid - 1;
+                binarySearch(arr, value, low, high);
+            }
+            else
+            {
+                low = mid + 1;
+                binarySearch(arr, value, low, high);
+            }
+        }
     }
     else
     {
@@ -56,15 +95,37 @@ void linearSearch(struct array *arr, int value)
 
 int main()
 {
-    int uSize, value;
+    int uSize, value, op;
     struct array arr;
-    printf("Enter size of array: ");
-    scanf("%d", &uSize);
-    createArray(&arr, uSize);
-    getArray(&arr, uSize);
-    printf("Enter element you want to find? ");
-    scanf("%d", &value);
-    linearSearch(&arr, value);
-    displayArray(&arr);
+    printf("Operations!!\n");
+    printf("1. Linear Search\n2. Binary Search\nSelect any one from 1 & 2: ");
+    scanf("%d", &op);
+    switch (op)
+    {
+    default:
+        printf("Select correct operation\n");
+        break;
+    case 1:
+        printf("Enter size of array: ");
+        scanf("%d", &uSize);
+        createArray(&arr, uSize);
+        getArray(&arr, uSize);
+        printf("Enter element you want to find? ");
+        scanf("%d", &value);
+        linearSearch(&arr, value);
+        displayArray(&arr);
+        break;
+    case 2:
+        printf("Enter size of array: ");
+        scanf("%d", &uSize);
+        createArray(&arr, uSize);
+        getArray(&arr, uSize);
+        bubble_sort(&arr);
+        printf("Enter element you want to find? ");
+        scanf("%d", &value);
+        displayArray(&arr);
+        binarySearch(&arr, value, 0, uSize - 1);
+        break;
+    }
     return 0;
 }
