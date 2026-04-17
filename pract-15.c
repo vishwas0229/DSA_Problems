@@ -53,6 +53,7 @@ void getRecord(struct student **head, int uSize)
             temp->next = newStudent;
             temp = newStudent;
         }
+        newStudent->next = NULL;
     }
 }
 
