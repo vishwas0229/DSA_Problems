@@ -1,0 +1,48 @@
+name: C/C++ Build & Syntax Check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Build Tools
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential
+
+      # Syntax check all C files recursively
+      - name: Check C Syntax
+        run: |
+          find . -type f -name "*.c" -exec gcc -fsyntax-only {} \;
+
+      # Syntax check all C++ files recursively
+      - name: Check C++ Syntax
+        run: |
+          find . -type f -name "*.cpp" -exec g++ -fsyntax-only {} \;
+
+      # Compile root-level C files if present
+      - name: Compile Root C Files
+        run: |
+          if ls *.c >/dev/null 2>&1; then
+            gcc *.c -o c_app
+            echo "✅ Root C files compiled successfully"
+          else
+            echo "ℹ️ No root-level C files found"
+          fi
+
+      # Compile root-level C++ files if present
+      - name: Compile Root C++ Files
+        run: |
+          if ls *.cpp >/dev/null 2>&1; then
+            g++ *.cpp -o cpp_app
+            echo "✅ Root C++ files compiled successfully"
+          else
+            echo "ℹ️ No root-level C++ files found"
+          fi
