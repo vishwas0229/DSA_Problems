@@ -4,7 +4,7 @@ class Solution(object):
         :type nums: List[int]
         :rtype: int
         """
-        sn = 0
+        singleOne = 0
         for i in range(len(nums)):
-            sn ^= nums[i]
-        return sn
+            singleOne ^= nums[i]
+        return singleOne
