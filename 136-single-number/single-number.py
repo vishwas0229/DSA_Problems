@@ -5,6 +5,6 @@ class Solution(object):
         :rtype: int
         """
         singleOne = 0
-        for i in range(len(nums)):
-            singleOne ^= nums[i]
+        for value in nums:
+            singleOne ^= value
         return singleOne
